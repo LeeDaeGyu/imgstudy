@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const multer = require("multer");
 const mongoose = require("mongoose");
@@ -22,10 +23,8 @@ const upload = multer({
 const app = express();
 const PORT = 5000;
 
-const URI =
-  "mongodb+srv://admin:79oLPVMi5d1anPzG@cluster0.jyjk6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 mongoose
-  .connect(URI)
+  .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("mongodb is connected");
     app.use("/uploads", express.static("uploads"));
