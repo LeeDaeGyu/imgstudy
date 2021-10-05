@@ -1,5 +1,6 @@
 const express = require("express");
 const multer = require("multer");
+const mongoose = require("mongoose");
 const { v4: uuid } = require("uuid");
 const mime = require("mime-types");
 const storage = multer.diskStorage({
@@ -21,11 +22,21 @@ const upload = multer({
 const app = express();
 const PORT = 5000;
 
-app.use("/uploads", express.static("uploads"));
-app.post("/upload", upload.single("image"), (req, res) => {
-  console.log(req.file);
-  res.json(req.file);
-});
-app.listen(PORT, () => {
-  console.log("Express Server listening on PORT " + PORT);
-});
+const URI =
+  "mongodb+srv://admin:79oLPVMi5d1anPzG@cluster0.jyjk6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+mongoose
+  .connect(URI)
+  .then(() => {
+    console.log("mongodb is connected");
+    app.use("/uploads", express.static("uploads"));
+    app.post("/upload", upload.single("image"), (req, res) => {
+      console.log(req.file);
+      res.json(req.file);
+    });
+    app.listen(PORT, () => {
+      console.log("Express Server listening on PORT " + PORT);
+    });
+  })
+  .catch(err => {
+    console.log(err);
+  });
