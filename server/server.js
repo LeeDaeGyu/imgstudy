@@ -10,6 +10,7 @@ const storage = multer.diskStorage({
     cb(null, `${uuid()}.${mime.extension(file.mimetype)}`)
 });
 
+const { ImageCollection } = require("./models/Image");
 const upload = multer({
   storage,
   fileFilter: (req, file, cb) => {
@@ -28,8 +29,12 @@ mongoose
   .then(() => {
     console.log("mongodb is connected");
     app.use("/uploads", express.static("uploads"));
-    app.post("/upload", upload.single("image"), (req, res) => {
-      console.log(req.file);
+    app.post("/upload", upload.single("image"), async (req, res) => {
+      const imgDoc = new ImageCollection({
+        key: req.file.filename,
+        originalFileName: req.file.originalname
+      });
+      await imgDoc.save();
       res.json(req.file);
     });
     app.listen(PORT, () => {
