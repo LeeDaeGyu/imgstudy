@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
+import "./UploadForm.css";
+import { toast } from "react-toastify";
+
 const UploadForm = () => {
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState("이미지를 선택해주세요.");
-  const formChange = e => {
+  const imgSelectHandler = e => {
     const UploadedFile = e.target.files[0];
     setFile(UploadedFile);
     setFileName(UploadedFile.name);
@@ -17,17 +20,21 @@ const UploadForm = () => {
         headers: { "Content-Type": "multipart/form-data" }
       });
       console.log(res);
-      alert("success");
+      toast.success("success");
     } catch (err) {
-      alert("fail");
+      toast.warn("fail");
       console.error(err);
     }
   };
   return (
     <form onSubmit={onSubmit}>
-      <label htmlFor="image">{fileName}</label>
-      <input id="image" type="file" onChange={formChange} />
-      <button type="submit">제출</button>
+      <div className="file-dropper">
+        {fileName}
+        <input id="image" type="file" onChange={imgSelectHandler} />
+      </div>
+      <button className="submitBtn " type="submit">
+        제출
+      </button>
     </form>
   );
 };
