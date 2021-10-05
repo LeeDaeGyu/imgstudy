@@ -29,13 +29,17 @@ mongoose
   .then(() => {
     console.log("mongodb is connected");
     app.use("/uploads", express.static("uploads"));
-    app.post("/upload", upload.single("image"), async (req, res) => {
+    app.post("/images", upload.single("image"), async (req, res) => {
       const imgDoc = new ImageCollection({
         key: req.file.filename,
         originalFileName: req.file.originalname
       });
       await imgDoc.save();
-      res.json(req.file);
+      res.json(imgDoc);
+    });
+    app.get("/images", async (req, res) => {
+      const getImgs = await ImageCollection.find();
+      res.json({ getImgs });
     });
     app.listen(PORT, () => {
       console.log("Express Server listening on PORT " + PORT);
