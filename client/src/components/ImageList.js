@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-const ImageList = ({ imgs }) => {
+import { ImageContext } from "./context/ImgContext";
+
+const ImageList = () => {
+  const [imgs] = useContext(ImageContext);
+
   let postImg = imgs.map(img => {
     return (
       <img
