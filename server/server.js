@@ -39,7 +39,8 @@ mongoose
     });
     app.get("/images", async (req, res) => {
       const getImgs = await ImageCollection.find();
-      res.json({ getImgs });
+
+      res.json(getImgs);
     });
     app.listen(PORT, () => {
       console.log("Express Server listening on PORT " + PORT);
