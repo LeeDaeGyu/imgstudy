@@ -4,7 +4,7 @@ import "./UploadForm.css";
 import { toast } from "react-toastify";
 import ProgressBar from "./ProgressBar.js";
 
-const UploadForm = () => {
+const UploadForm = ({ imgs, setImgs }) => {
   const defaultFileName = "이미지를 선택해주세요.";
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState(defaultFileName);
@@ -39,6 +39,9 @@ const UploadForm = () => {
         setFileName(defaultFileName);
         setImgSrc(null);
       }, 3000);
+      console.log(res);
+      setImgs([...imgs, res.data]);
+      console.log(imgs);
     } catch (err) {
       toast.warn("fail");
       console.error(err);
