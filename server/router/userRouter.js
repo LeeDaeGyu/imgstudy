@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const userRouter = Router();
 const userCollection = require("../models/user");
-const { hash } = require("bcryptjs");
+const { hash, compare } = require("bcryptjs");
 
 userRouter.post("/register", async (req, res) => {
   try {
@@ -14,7 +14,7 @@ userRouter.post("/register", async (req, res) => {
     if (username.length < 3)
       throw new Error("username 은 세자리 이상이어야 합니다.");
     const hashedPassword = await hash(password, 10);
-    console.log(hashedPassword);
+
     const user = new userCollection({ name, username, hashedPassword });
     await user.save();
     res.send({ user });
@@ -23,4 +23,19 @@ userRouter.post("/register", async (req, res) => {
   }
 });
 
+userRouter.post("/login", async (req, res) => {
+  try {
+    const {
+      body: { password, username }
+    } = req;
+
+    const getUser = await userCollection.findOne({ username });
+    const isValid = await compare(password, getUser.hashedPassword);
+
+    if (!isValid) throw new Error("입력하신 정보가 올바르지 않습니다.");
+    res.send({ message: "user validated" });
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
+});
 module.exports = { userRouter };
