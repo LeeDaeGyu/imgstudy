@@ -4,7 +4,12 @@ const userSchema = new Schema(
   {
     name: { type: String, required: true },
     username: { type: String, require: true, unique: true },
-    hashedPassword: { type: String, required: true }
+    hashedPassword: { type: String, required: true },
+    sessions: [
+      {
+        createdAt: { type: Date, required: true }
+      }
+    ]
   },
   { timestamps: true }
 );
