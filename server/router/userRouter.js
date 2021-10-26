@@ -60,10 +60,10 @@ userRouter.patch("/login", async (req, res) => {
 userRouter.patch("/logout", async (req, res) => {
   try {
     const {
+      user,
       headers: { sessionid }
     } = req;
-    if (!isValidObjectId(sessionid)) throw new Error("Invalid sessionid");
-    const user = await userCollection.findOne({ "sessions._id": sessionid });
+    console.log(user);
     if (!user) throw new Error("invalid sessionid");
     await userCollection.updateOne(
       { _id: user._id },
@@ -77,6 +77,7 @@ userRouter.patch("/logout", async (req, res) => {
     );
     res.send({ user });
   } catch (err) {
+    console.log(err);
     res.status(400).send({ message: err.message });
   }
 });
