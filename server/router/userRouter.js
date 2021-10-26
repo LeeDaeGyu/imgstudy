@@ -2,6 +2,7 @@ const { Router } = require("express");
 const userRouter = Router();
 const userCollection = require("../models/user");
 const { hash, compare } = require("bcryptjs");
+const { isValidObjectId } = require("mongoose");
 
 userRouter.post("/register", async (req, res) => {
   try {
@@ -34,7 +35,7 @@ userRouter.post("/register", async (req, res) => {
   }
 });
 
-userRouter.post("/login", async (req, res) => {
+userRouter.patch("/login", async (req, res) => {
   try {
     const {
       body: { password, username }
@@ -51,6 +52,30 @@ userRouter.post("/login", async (req, res) => {
       sessionId: session._id,
       name: getUser.name
     });
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
+});
+
+userRouter.patch("/logout", async (req, res) => {
+  try {
+    const {
+      headers: { sessionid }
+    } = req;
+    if (!isValidObjectId(sessionid)) throw new Error("Invalid sessionid");
+    const user = await userCollection.findOne({ "sessions._id": sessionid });
+    if (!user) throw new Error("invalid sessionid");
+    await userCollection.updateOne(
+      { _id: user._id },
+      {
+        $pull: {
+          sessions: {
+            _id: sessionid
+          }
+        }
+      }
+    );
+    res.send({ user });
   } catch (err) {
     res.status(400).send({ message: err.message });
   }
