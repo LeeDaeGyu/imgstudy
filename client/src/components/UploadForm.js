@@ -3,7 +3,7 @@ import axios from "axios";
 import "./UploadForm.css";
 import { toast } from "react-toastify";
 import ProgressBar from "./ProgressBar.js";
-import { ImageContext } from "./context/ImgContext";
+import { ImageContext } from "../context/ImgContext";
 
 const UploadForm = () => {
   const [imgs, setImgs] = useContext(ImageContext);

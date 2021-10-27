@@ -1,13 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-import { ImageProvider } from "./components/context/ImgContext";
+import { ImageProvider } from "./context/ImgContext";
+import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.render(
   <React.StrictMode>
-    <ImageProvider>
-      <App />
-    </ImageProvider>
+    <BrowserRouter>
+      <ImageProvider>
+        <App />
+      </ImageProvider>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")
 );
