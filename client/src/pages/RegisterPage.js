@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import CustomInput from "../components/CustomInput";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { AuthContext } from "../context/AuthContext";
 
 const LoginPage = () => {
+  const [me, setMe] = useContext(AuthContext);
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -17,12 +19,19 @@ const LoginPage = () => {
         throw new Error("비밀번호를 6자 이상으로 해주세요.");
       if (passwordCheck !== password)
         throw new Error("비밀번호를 확인해 주세요.");
+
       const result = await axios.post("/users/register", {
         name,
         username,
         password
       });
-      console.log(result);
+
+      const {
+        data: { userId, usersname, sessionId }
+      } = result;
+
+      setMe({ userId, sessionId, usersname });
+      toast.success("회원가입 성공!");
     } catch (err) {
       console.error(err.message);
       toast.error(err.message);

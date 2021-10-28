@@ -27,10 +27,12 @@ userRouter.post("/register", async (req, res) => {
     const session = user.sessions[0];
     res.send({
       message: "user registered",
+      userId: user.username,
       sessionId: session._id,
-      name: user.name
+      usersname: user.name
     });
   } catch (err) {
+    console.error(err.message);
     res.status(400).send({ message: err.message });
   }
 });
@@ -53,6 +55,7 @@ userRouter.patch("/login", async (req, res) => {
       name: getUser.name
     });
   } catch (err) {
+    console.error(err.message);
     res.status(400).send({ message: err.message });
   }
 });
