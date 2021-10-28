@@ -52,7 +52,8 @@ userRouter.patch("/login", async (req, res) => {
     res.send({
       message: "user validated",
       sessionId: session._id,
-      name: getUser.name
+      name: getUser.name,
+      userId: getUser.username
     });
   } catch (err) {
     console.error(err.message);
@@ -82,6 +83,21 @@ userRouter.patch("/logout", async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(400).send({ message: err.message });
+  }
+});
+
+userRouter.get("/me", (req, res) => {
+  try {
+    if (!req.user) throw new Error("권한이 없습니다.");
+
+    res.json({
+      message: "success",
+      sessionId: req.headers.sessionid,
+      name: req.user.name,
+      userId: req.user._id
+    });
+  } catch (err) {
+    res.json({ message: err.message });
   }
 });
 module.exports = { userRouter };

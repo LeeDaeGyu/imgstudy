@@ -17,12 +17,21 @@ const ToolBar = () => {
         // }
       );
       setMe();
+      localStorage.removeItem("sessionId");
       toast.success("로그아웃");
     } catch (err) {
       console.log(err.message);
       toast.error(err.message);
     }
   };
+  if (me) {
+    console.log(me.username);
+    console.log(me.sessionId);
+    console.log(me.userId);
+    console.log(me);
+  } else {
+    console.log(me);
+  }
   return (
     <div>
       <Link to="/">
@@ -31,7 +40,7 @@ const ToolBar = () => {
 
       {me ? (
         <span style={{ float: "right" }} onClick={logoutHandler}>
-          로그아웃 {me.usersname}
+          로그아웃 {me.userId}
         </span>
       ) : (
         <>

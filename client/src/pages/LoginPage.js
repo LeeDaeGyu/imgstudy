@@ -16,10 +16,11 @@ const LoginPage = () => {
       if (username.length < 3 || password.length < 6)
         throw new Error("입력하신 정보가 올바르지 않습니다.");
       const result = await axios.patch("/users/login", { username, password });
+      console.log(result);
       setMe({
         usersname: result.data.name,
         sessionId: result.data.sessionId,
-        userId: result.data.username
+        userId: result.data.userId
       });
       toast.success("로그인 성공!");
       history.push("/");
