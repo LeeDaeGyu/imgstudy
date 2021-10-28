@@ -11,10 +11,10 @@ const ToolBar = () => {
     try {
       await axios.patch(
         "/users/logout",
-        {},
-        {
-          headers: { sessionid: me.sessionId }
-        }
+        {}
+        // {
+        //   headers: { sessionid: me.sessionId }
+        // }
       );
       setMe();
       toast.success("로그아웃");
@@ -31,7 +31,7 @@ const ToolBar = () => {
 
       {me ? (
         <span style={{ float: "right" }} onClick={logoutHandler}>
-          로그아웃
+          로그아웃 {me.usersname}
         </span>
       ) : (
         <>

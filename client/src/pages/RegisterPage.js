@@ -3,14 +3,15 @@ import CustomInput from "../components/CustomInput";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
+import { useHistory } from "react-router-dom";
 
 const LoginPage = () => {
-  const [me, setMe] = useContext(AuthContext);
+  const [, setMe] = useContext(AuthContext);
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
-
+  const history = useHistory();
   const onSubmitHandler = async e => {
     try {
       e.preventDefault();
@@ -32,6 +33,7 @@ const LoginPage = () => {
 
       setMe({ userId, sessionId, usersname });
       toast.success("회원가입 성공!");
+      history.push("/");
     } catch (err) {
       console.error(err.message);
       toast.error(err.message);
