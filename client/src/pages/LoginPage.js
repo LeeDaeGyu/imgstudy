@@ -25,8 +25,8 @@ const LoginPage = () => {
       toast.success("로그인 성공!");
       history.push("/");
     } catch (err) {
-      console.error(err);
-      toast.error(err.message);
+      console.error(err.message);
+      toast.error(err.response.data.message);
     }
   };
   return (

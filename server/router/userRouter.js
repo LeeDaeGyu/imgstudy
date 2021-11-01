@@ -44,6 +44,7 @@ userRouter.patch("/login", async (req, res) => {
     } = req;
 
     const getUser = await userCollection.findOne({ username });
+    if (!getUser) throw new Error("가입되지 않은 이메일 입니다ㅏ..");
     const isValid = await compare(password, getUser.hashedPassword);
     if (!isValid) throw new Error("입력하신 정보가 올바르지 않습니다.");
     getUser.sessions.push({ createdAt: new Date() });
@@ -99,5 +100,9 @@ userRouter.get("/me", (req, res) => {
   } catch (err) {
     res.json({ message: err.message });
   }
+});
+
+userRouter.get("/me", (req, res) => {
+  //본인의 사진들만 리턴 (public ===false)
 });
 module.exports = { userRouter };
