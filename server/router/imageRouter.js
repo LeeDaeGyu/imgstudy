@@ -5,12 +5,26 @@ const { upload } = require("../middleware/imageUpload");
 
 imageRouter.post("/", upload.single("image"), async (req, res) => {
   //유저 정보, public 유무 확인
-  const imgDoc = new ImageCollection({
-    key: req.file.filename,
-    originalFileName: req.file.originalname
-  });
-  await imgDoc.save();
-  res.json(imgDoc);
+
+  try {
+    if (!req.user) throw new Error("권한이 없습니다.");
+
+    const imgDoc = new ImageCollection({
+      user: {
+        _id: req.user.id,
+        name: req.user.name,
+        username: req.user.username
+      },
+      public: req.body.public,
+      key: req.file.filename,
+      originalFileName: req.file.originalname
+    });
+    await imgDoc.save();
+    res.json(imgDoc);
+  } catch (err) {
+    console.log(err.message);
+    res.status(400).send({ message: err.message });
+  }
 });
 imageRouter.get("/", async (req, res) => {
   // public 이미지들만 제공
