@@ -3,6 +3,7 @@ const userRouter = Router();
 const userCollection = require("../models/user");
 const { hash, compare } = require("bcryptjs");
 const { isValidObjectId } = require("mongoose");
+const { ImageCollection } = require("../models/Image");
 
 userRouter.post("/register", async (req, res) => {
   try {
@@ -102,7 +103,15 @@ userRouter.get("/me", (req, res) => {
   }
 });
 
-userRouter.get("/me", (req, res) => {
+userRouter.get("/me/images", async (req, res) => {
   //본인의 사진들만 리턴 (public ===false)
+  try {
+    if (!req.user) throw new Error("권한이 없습니다.");
+    const images = await ImageCollection.find({ "user._id": req.user.id });
+    res.json(images);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ message: err.message });
+  }
 });
 module.exports = { userRouter };
