@@ -58,14 +58,52 @@ imageRouter.delete("/:imageId", async (req, res) => {
   }
 });
 
-imageRouter.patch("/:image/Like", (req, res) => {
+imageRouter.patch("/:imageId/like", async (req, res) => {
   //유저 권한 확인
   //like 중복 안되도록 확인
+  try {
+    if (!req.user) throw new Error("권한이 없습니다.");
+    const {
+      params: { imageId },
+      user
+    } = req;
+    if (!isValidObjectId(imageId))
+      throw new Error("잘못된 이미지 아이디입니다.");
+
+    const image = await ImageCollection.findOneAndUpdate(
+      { _id: imageId },
+      { $addToSet: { likes: user.id } },
+      { new: true }
+    );
+
+    res.send({ image });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ message: err.message });
+  }
 });
 
-imageRouter.patch("/:image/unike", (req, res) => {
+imageRouter.patch("/:imageId/unlike", async (req, res) => {
   //유저 권한 확인
   //unlike 중복 안되도록 확인
+  try {
+    if (!req.user) throw new Error("권한이 없습니다.");
+    const {
+      params: { imageId },
+      user
+    } = req;
+    if (!isValidObjectId(imageId))
+      throw new Error("잘못된 이미지 아이디입니다.");
+    const image = await ImageCollection.findOneAndUpdate(
+      { _id: imageId },
+      { $pull: { likes: user.id } },
+      { new: true }
+    );
+    res.send({ image });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ message: err.message });
+  }
 });
 
 module.exports = { imageRouter };
