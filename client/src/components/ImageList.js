@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext } from "react";
-import axios from "axios";
+import React, { useContext } from "react";
+
 import { ImageContext } from "../context/ImgContext";
 
 const ImageList = () => {
@@ -8,6 +8,7 @@ const ImageList = () => {
   let postImg = imgs.map(img => {
     return (
       <img
+        alt=""
         key={img.key}
         style={{ width: "100%" }}
         src={`http://localhost:5000/uploads/${img.key}`}

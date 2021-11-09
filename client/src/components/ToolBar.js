@@ -24,14 +24,7 @@ const ToolBar = () => {
       toast.error(err.message);
     }
   };
-  if (me) {
-    console.log(me.username);
-    console.log(me.sessionId);
-    console.log(me.userId);
-    console.log(me);
-  } else {
-    console.log(me);
-  }
+
   return (
     <div>
       <Link to="/">
@@ -39,7 +32,10 @@ const ToolBar = () => {
       </Link>
 
       {me ? (
-        <span style={{ float: "right" }} onClick={logoutHandler}>
+        <span
+          style={{ float: "right", cursor: "pointer" }}
+          onClick={logoutHandler}
+        >
           로그아웃 {me.userId}
         </span>
       ) : (
