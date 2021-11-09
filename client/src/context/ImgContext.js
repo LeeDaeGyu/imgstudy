@@ -20,14 +20,19 @@ export const ImageProvider = prop => {
   }, []);
   useEffect(() => {
     if (me) {
-      axios
-        .get("/users/me/images")
-        .then(res => {
-          setMyImages(res.data);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      setTimeout(() => {
+        axios
+          .get("/users/me/images")
+          .then(res => {
+            setMyImages(res.data);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }, 0);
+    } else {
+      setMyImages([]);
+      setIsPublic(true);
     }
   }, [me]);
   return (
