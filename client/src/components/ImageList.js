@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 
 import { ImageContext } from "../context/ImgContext";
 
 const ImageList = () => {
-  const [imgs] = useContext(ImageContext);
+  const { imgs, myImages, isPublic, setIsPublic } = useContext(ImageContext);
 
-  let postImg = imgs.map(img => {
+  let postImg = (isPublic ? imgs : myImages).map(img => {
     return (
       <img
         alt=""
@@ -18,7 +18,17 @@ const ImageList = () => {
 
   return (
     <>
-      <h2>Image List</h2>
+      <h2 style={{ display: "inline-block", marginRight: "10px" }}>
+        Image List ({isPublic ? "공개" : "개인"} 사진 )
+      </h2>
+      <button
+        onClick={() => {
+          setIsPublic(!isPublic);
+        }}
+      >
+        {(isPublic ? "개인" : "공개") + " 사진 보기"}
+      </button>
+
       {postImg}
     </>
   );
