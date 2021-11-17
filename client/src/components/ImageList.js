@@ -1,19 +1,17 @@
 import React, { useContext, useState } from "react";
-
+import "./ImageList.css";
 import { ImageContext } from "../context/ImgContext";
 import { AuthContext } from "../context/AuthContext";
+import { Link } from "react-router-dom";
 
 const ImageList = () => {
   const { imgs, myImages, isPublic, setIsPublic } = useContext(ImageContext);
   const [me] = useContext(AuthContext);
   let postImg = (isPublic ? imgs : myImages).map(img => {
     return (
-      <img
-        alt=""
-        key={img.key}
-        style={{ width: "100%" }}
-        src={`http://localhost:5000/uploads/${img.key}`}
-      />
+      <Link key={img.key} to={`/images/${img._id}`}>
+        <img alt="" src={`http://localhost:5000/uploads/${img.key}`} />
+      </Link>
     );
   });
 
@@ -31,8 +29,7 @@ const ImageList = () => {
           {(isPublic ? "개인" : "공개") + " 사진 보기"}
         </button>
       )}
-
-      {postImg}
+      <div className="image-list-container">{postImg}</div>
     </>
   );
 };
